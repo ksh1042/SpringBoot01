@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add User</title>
+  <script src="/vue.js"></script>
+  <script src="/axios.min.js"></script>
+</head>
+<body>
+  <form v-on:submit="submitForm">
+    <div>
+      <label for="userId">id : </label>
+      <input id="userId" type="text" v-model="userId">
+    </div>
+    <div>
+      <label for="password">Password : </label>
+      <input id="password" type="password" v-model="password">
+    </div>
+    <div>
+      <label for="firstName">First Name : </label>
+      <input id="firstName" type="text" v-model="firstName">
+    </div>
+    <div>
+      <label for="lastName">Last Name : </label>
+      <input id="lastName" type="text" v-model="lastName">
+    </div>
+    <div>
+      <label for="aliasName">Alias Name : </label>
+      <input id="aliasName" type="text" v-model="aliasName">
+    </div>
+    <div>
+      <label for="sex">Sex : </label>
+      <select id="sex" v-model="sex">
+        <option disabled>-</option>
+        <option>M</option>
+        <option>F</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit">write</button>
+    </div>
+  </form>
+  <script>
+    export default {
+      data : () => {
+        return {
+          userId : '',
+          password : '',
+          firstName : '',
+          lastName : '',
+          aliasName : '',
+          sex : '',
+        }
+      },
+      methods : {
+        submitForm : () => {
+          axios.post('/addDevTemp', this.data)
+            .then((res)=> {
+              console.log(res);
+            })
+            .catch((err)=> {
+              console.log(err);
+            })
+        }
+      }
+    }
+  </script>
+</body>
+</html>
