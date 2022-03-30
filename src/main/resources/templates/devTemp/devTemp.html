@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add Dev Temp</title>
+  <script src="/vue.js"></script>
+  <script src="/axios.min.js"></script>
+</head>
+<body>
+<div id="addDevTempApp">
+  <div>
+    <table>
+      <tr>
+        <th>seq</th>
+        <th>x</th>
+      </tr>
+      <tr v-for="item in viewData">
+        <td>{{ item.seq }}</td>
+        <td>{{ item.x }}</td>
+      </tr>
+    </table>
+  </div>
+  <form @submit.prevent="submitForm">
+    <div>
+      <label for="x">id : </label>
+      <input id="x" type="text" placeholder="input x value" v-model="formData.x">
+    </div>
+    <div>
+      <button type="submit">write</button>
+    </div>
+    <div>
+      <div v-if="errorShow">
+      <ul>
+        <li v-for="error in errors" style="color:#FF0000;">{{ error }}</li>
+      </ul>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  new Vue({
+    el : '#addDevTempApp',
+    data : {
+      formData : {
+        seq : '',
+        x : '',
+      },
+      viewData : [],
+      errors : [],
+      errorShow : false,
+      tryCnt : 0
+    },
+    // 최초 실행
+    mounted : function() {
+      this.get();
+    },
+    methods : {
+      get : function() {
+        axios.get('/devTemp/get')
+          .then( res => {
+            this.viewData = res.data;
+          });
+      },
+      validation : function() {
+        this.errors = [];
+
+        if(!this.formData.x)
+          this.errors.push('x is not be empty');
+
+        if(!this.errorShow)
+          return true;
+      },
+      clear : function() {
+        this.formData.x = '';
+      },
+      submitForm : function() {
+        this.validation();
+
+        if(this.errors.length == 0)
+        {
+          axios.post('/devTemp/add', this.formData)
+            .then((res) => {
+              this.get();
+            })
+            .catch((err) => {
+              console.error(err);
+            })
+            .finally(() => {
+              this.tryCnt++;
+            })
+        }
+
+        this.clear();
+      }
+    }
+  })
+</script>
+</body>
+</html>
