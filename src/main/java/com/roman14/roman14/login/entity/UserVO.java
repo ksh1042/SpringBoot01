@@ -3,7 +3,7 @@ package com.roman14.roman14.login.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,7 @@ public class UserVO
   private String password; // !!DEVELOP ONLY!!
 
   @Column(name = "SALT")
-  private String salt;
+  private long salt;
 
   @Column(name = "FIRST_NAME")
   private String firstName;
@@ -31,10 +31,10 @@ public class UserVO
   private String sex;
 
   @Column(name = "REGIST_DATE")
-  private Date registDate;
+  private LocalDateTime registDate;
 
   @Column(name = "MODIFY_DATE")
-  private Date modifyDate;
+  private LocalDateTime modifyDate;
 
   /** 사용 중지된 계정의 여부 */
   @Column(name = "IS_USE")
