@@ -4,6 +4,7 @@ package com.roman14.roman14.login.util;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Locale;
 
 /**
@@ -22,7 +23,7 @@ public final class HashCrypt
 
   private HashCrypt() {}
 
-  public final static HashCrypt getInstance()
+  public static HashCrypt getInstance()
   {
     if(INSTANCE == null)
     {
@@ -39,14 +40,27 @@ public final class HashCrypt
 
   /**
    * 입력된 message를 지정된 hash 알고리즘을 통해 암호화된 16진수 문자열로 변환
-   * @param message
-   * @return
+   * SecureRandom 클래스의 nextLong 메서드를 통해 salt 값 자동 생성
+   * @param message 암호화 할 문자열
+   * @return 암호화된 16진수 문자열
    * @throws NoSuchAlgorithmException
    */
   public String encrypt(String message) throws NoSuchAlgorithmException
   {
+    return this.encrypt(message, new SecureRandom().nextLong());
+  }
+
+  /**
+   * 입력된 message를 salt와 조합하여 지정된 hash 알고리즘을 통해 암호화된 16진수 문자열로 변환
+   * @param message 암호화 할 문자열
+   * @param salt 8비트 정수 문자열(ex. new SecureRandom().nextLong())
+   * @return 암호화된 16진수 문자열
+   * @throws NoSuchAlgorithmException
+   */
+  public String encrypt(String message, long salt) throws NoSuchAlgorithmException
+  {
     return hexToString( MessageDigest.getInstance(ALGORITHM)
-                          .digest(message.getBytes(StandardCharsets.UTF_8)));
+      .digest((message + salt).getBytes(StandardCharsets.UTF_8)));
   }
 
   /**

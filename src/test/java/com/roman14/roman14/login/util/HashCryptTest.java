@@ -16,14 +16,16 @@ class HashCryptTest
   @DisplayName("해시 암호화")
   void encrypt()
   {
-    final String message = "abcd";
-    final String exceptedResult = "88D4266FD4E6338D13B845FCF289579D209C897823B9217DA3E161936F031589";
+    final String message        = "abcd";
+    final String exceptedResult = "2B22A9986AFF26F9568F02D8BF8346580EA6D49EA3C3B7D17698784A67513A63";
+    final long salt             = 4593200548957554529L;
 
+    String result    = "";
     boolean isExcept = false;
-    String result  = "";
+
     try
     {
-      result = HashCrypt.getInstance().encrypt(message);
+      result = HashCrypt.getInstance().encrypt(message, salt);
     }
     catch ( NoSuchAlgorithmException e )
     {
