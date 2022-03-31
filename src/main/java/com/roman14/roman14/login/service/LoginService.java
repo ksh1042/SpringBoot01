@@ -1,7 +1,10 @@
 package com.roman14.roman14.login.service;
 
+import com.roman14.roman14.login.entity.UserVO;
 import com.roman14.roman14.login.repository.LoginRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class LoginService
@@ -21,6 +24,16 @@ public class LoginService
   public boolean selectUserId(String userId)
   {
     return loginRepository.findById(userId).isPresent();
+  }
+
+  /**
+   * 사용자 등록
+   * @param user
+   * @return
+   */
+  public boolean addUser(UserVO user)
+  {
+    return Optional.of(loginRepository.save(user)).isPresent();
   }
 
 }

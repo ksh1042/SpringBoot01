@@ -35,6 +35,7 @@ public class UserHistoryVO
   private String descriptions;
 
   /** 사용 중지된 계정의 여부 */
+  @Column(name = "IS_USE")
   private boolean isUse;
 
 }

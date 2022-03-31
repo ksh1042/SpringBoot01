@@ -18,6 +18,9 @@ public class UserVO
   @Column(name = "PASSWORD")
   private String password; // !!DEVELOP ONLY!!
 
+  @Column(name = "SALT")
+  private String salt;
+
   @Column(name = "FIRST_NAME")
   private String firstName;
 
