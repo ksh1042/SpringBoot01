@@ -1,4 +1,4 @@
-package com.roman14.roman14.main.entity;
+package com.roman14.roman14.login.entity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +8,8 @@ import java.util.Date;
 public class UserHistoryVO
 {
   @Id
+  @SequenceGenerator(name = "userHistoryInfoSeq", sequenceName = "SEQ_USER_INFO_SEQ")
+  @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "userHistoryInfoSeq")
   @Column(name = "SEQ")
   private String seq;
 
@@ -33,6 +35,6 @@ public class UserHistoryVO
   private String descriptions;
 
   /** 사용 중지된 계정의 여부 */
-  private boolean isUse;;
+  private boolean isUse;
 
 }

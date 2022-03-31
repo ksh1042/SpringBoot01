@@ -1,4 +1,4 @@
-package com.roman14.roman14.main.entity;
+package com.roman14.roman14.login.entity;
 
 import lombok.Data;
 
