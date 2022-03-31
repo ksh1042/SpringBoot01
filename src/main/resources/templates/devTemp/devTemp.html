@@ -17,6 +17,7 @@
       <tr v-for="item in viewData">
         <td>{{ item.seq }}</td>
         <td>{{ item.x }}</td>
+        <td><button v-on:click="remove($event, item.seq)">remove</button></td>
       </tr>
     </table>
   </div>
@@ -58,7 +59,8 @@
       get : function() {
         axios.get('/devTemp/get')
           .then( res => {
-            this.viewData = res.data;
+            if(res.status / 100 == 2)
+              this.viewData = res.data;
           });
       },
       validation : function() {
@@ -79,16 +81,35 @@
         if(this.errors.length == 0)
         {
           axios.post('/devTemp/add', this.formData)
-            .then((res) => {
-              this.get();
+            .then(res => {
+              if(res.status / 100 == 2)
+                this.get();
             })
-            .catch((err) => {
+            .catch(err => {
               console.error(err);
             })
             .finally(() => {
               this.tryCnt++;
             })
         }
+
+        this.clear();
+      },
+      remove : function(event, seq)
+      {
+        if(seq)
+          this.errors.push('illegal argument exception : seq');
+
+        axios.delete('/devTemp/delete', { data : { seq : seq }})
+          .then(res => {
+            if(res.status / 100 == 2)
+              this.get();
+          })
+          .catch(err => {
+            console.error(err);
+          }).finally(() => {
+
+          });
 
         this.clear();
       }
