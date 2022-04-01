@@ -1,19 +1,26 @@
 package com.roman14.roman14.login.service;
 
+import com.roman14.roman14.login.entity.UserHistoryVO;
 import com.roman14.roman14.login.entity.UserVO;
-import com.roman14.roman14.login.repository.LoginRepository;
+import com.roman14.roman14.login.repository.LoginHistoryRepository;
+import com.roman14.roman14.login.repository.UserHistoryRepository;
+import com.roman14.roman14.login.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoginService
 {
-  private final LoginRepository loginRepository;
+  private final UserRepository userRepository;
+  private final UserHistoryRepository userHistoryRepository;
+  private final LoginHistoryRepository loginHistoryRepository;
 
-  public LoginService(LoginRepository loginRepository)
+
+  public LoginService(UserRepository userRepository, UserHistoryRepository userHistoryRepository, LoginHistoryRepository loginHistoryRepository)
   {
-    this.loginRepository = loginRepository;
+    this.userRepository = userRepository;
+    this.userHistoryRepository = userHistoryRepository;
+    this.loginHistoryRepository = loginHistoryRepository;
   }
 
   /**
@@ -23,7 +30,7 @@ public class LoginService
    */
   public boolean selectUserId(String userId)
   {
-    return loginRepository.findById(userId).isPresent();
+    return userRepository.findById(userId).isPresent();
   }
 
   /**
@@ -31,9 +38,14 @@ public class LoginService
    * @param user
    * @return
    */
-  public boolean addUser(UserVO user)
+  @Transactional
+  public void addUser(final UserVO user)
   {
-    return Optional.of(loginRepository.save(user)).isPresent();
+    final UserHistoryVO userHistoryVO = new UserHistoryVO(user);
+    userHistoryVO.setDescriptions("create");
+
+    userRepository.save(user);
+    userHistoryRepository.save(userHistoryVO);
   }
 
 }

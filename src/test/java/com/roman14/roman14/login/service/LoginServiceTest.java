@@ -1,11 +1,13 @@
 package com.roman14.roman14.login.service;
 
 import com.roman14.roman14.login.entity.UserVO;
+import com.roman14.roman14.login.util.HashCrypt;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 @SpringBootTest
@@ -30,22 +32,26 @@ class LoginServiceTest
   @Transactional
   @DisplayName("사용자 생성")
   @Order(2)
-  void addUser()
+  void addUser() throws NoSuchAlgorithmException
   {
     final UserVO user = new UserVO();
 
-    final String userId = "develtop001";
     final String passwordMsg = "develtop001";
-    final String salt = String.valueOf(new SecureRandom().nextLong());
+    final long salt = new SecureRandom().nextLong();
 
-    String password = null;// TODO --> password = SHA-256( passwordMsg + salt );
+    final String password = HashCrypt.getInstance().encrypt(passwordMsg, salt);
 
-    user.setUserId(userId);
+    user.setUserId("develop");
     user.setPassword(password);
     user.setSalt(salt);
+    user.setFirstName("Young Hee");
+    user.setLastName("Kim");
+    user.setIsUse('T');
+    user.setSex("F");
 
-    Assertions.assertTrue( loginService.addUser(user) );
+
+    Assertions.assertAll(
+      () -> loginService.addUser(user)
+    );
   }
-
-  //@Transactional
 }

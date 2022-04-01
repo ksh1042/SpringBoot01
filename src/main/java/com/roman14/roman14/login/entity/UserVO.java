@@ -29,7 +29,7 @@ public class UserVO
 
   /** 암호화에 사용되는 salt */
   @Column(name = "SALT")
-  private long salt;
+  private Long salt;
 
   /** 사용자 이름 */
   @Column(name = "FIRST_NAME")
@@ -53,7 +53,7 @@ public class UserVO
 
   /** 사용 중지된 계정의 여부 */
   @Column(name = "IS_USE")
-  private String isUse;
+  private char isUse;
 
   /** 로그인 시도 이력 */
   @OneToMany
