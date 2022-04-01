@@ -1,5 +1,7 @@
 package com.roman14.roman14.login.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,6 +13,7 @@ import java.util.Date;
  * </pre>
  */
 @Entity
+@Data
 @Table(name = "TB_USER_INFO_HISTORY")
 public class UserHistoryVO
 {
