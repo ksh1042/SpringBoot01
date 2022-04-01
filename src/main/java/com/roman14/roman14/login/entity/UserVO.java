@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Entity
 @Data
+//@DynamicUpdate  // update query 캐시를 이용하지 않게 되므로 퍼포먼스상 문제가 생길 수 있음
 @Table(name = "TB_USER_INFO")
 public class UserVO
 {

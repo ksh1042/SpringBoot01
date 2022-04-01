@@ -20,6 +20,6 @@ public class LoginRestController
   @GetMapping("/login/checkExist")
   public ResponseEntity<Boolean> loginCheckExist(@RequestBody UserVO user)
   {
-    return ResponseEntity.ok().body(loginService.selectUserId(user.getUserId()));
+    return ResponseEntity.ok().body(loginService.checkExist(user.getUserId()));
   }
 }

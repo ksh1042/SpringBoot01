@@ -1,12 +1,9 @@
 package com.roman14.roman14.login.service;
 
-import com.roman14.roman14.login.entity.UserHistoryVO;
-import com.roman14.roman14.login.entity.UserVO;
 import com.roman14.roman14.login.repository.LoginHistoryRepository;
 import com.roman14.roman14.login.repository.UserHistoryRepository;
 import com.roman14.roman14.login.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoginService
@@ -28,24 +25,9 @@ public class LoginService
    * @param userId
    * @return null=false, notNull=true
    */
-  public boolean selectUserId(String userId)
+  public boolean checkExist(String userId)
   {
     return userRepository.findById(userId).isPresent();
-  }
-
-  /**
-   * 사용자 등록
-   * @param user
-   * @return
-   */
-  @Transactional
-  public void addUser(final UserVO user)
-  {
-    final UserHistoryVO userHistoryVO = new UserHistoryVO(user);
-    userHistoryVO.setDescriptions("create");
-
-    userRepository.save(user);
-    userHistoryRepository.save(userHistoryVO);
   }
 
 }
