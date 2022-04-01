@@ -18,6 +18,7 @@ import java.util.List;
 @Table(name = "TB_USER_INFO")
 public class UserVO
 {
+  /** */
   @Id
   @Column(name = "USER_ID")
   private String userId;
