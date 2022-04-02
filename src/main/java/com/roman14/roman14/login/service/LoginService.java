@@ -1,9 +1,14 @@
 package com.roman14.roman14.login.service;
 
+import com.roman14.roman14.login.entity.UserVO;
 import com.roman14.roman14.login.repository.LoginHistoryRepository;
 import com.roman14.roman14.login.repository.UserHistoryRepository;
 import com.roman14.roman14.login.repository.UserRepository;
+import com.roman14.roman14.login.util.HashCrypt;
 import org.springframework.stereotype.Service;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 @Service
 public class LoginService
@@ -21,13 +26,28 @@ public class LoginService
   }
 
   /**
-   * 사용자 아이디를 통한 사용자 존재여부 확인
+   * 패스워드를 통한 사용자 로그인 체크
    * @param userId
-   * @return null=false, notNull=true
+   * @param password
+   * @return
    */
-  public boolean checkExist(String userId)
+  public Optional<UserVO> checkLogin(String userId, String password)
   {
-    return userRepository.findById(userId).isPresent();
+    return userRepository.findById(userId).filter(user -> {
+      boolean result = false;
+      try
+      {
+        result = HashCrypt.getInstance()
+          .encrypt(password, user.getSalt())
+          .equals(user.getPassword());
+      }
+      catch ( NoSuchAlgorithmException e )
+      {
+        e.printStackTrace();
+      }
+
+      return result;
+    });
   }
 
 }

@@ -23,6 +23,16 @@ public class UserService
   }
 
   /**
+   * 사용자 아이디를 통한 사용자 중복 확인
+   * @param userId
+   * @return null=true, notNull=false
+   */
+  public boolean isExist(String userId)
+  {
+    return !userRepository.findById(userId).isPresent();
+  }
+
+  /**
    * 사용자 조회
    * @param userId
    */

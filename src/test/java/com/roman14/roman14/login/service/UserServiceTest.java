@@ -20,6 +20,53 @@ class UserServiceTest
 
   @Nested
   @Transactional
+  @DisplayName("아이디 중복 확인")
+  class IsExist
+  {
+    private UserVO user;
+    private String userId;
+
+    @BeforeEach
+    public void init() throws NoSuchAlgorithmException
+    {
+      final long   salt   = new SecureRandom().nextLong();
+
+      this.user    = new UserVO();
+      this.userId  = "#develop";
+
+      this.user.setUserId(userId);
+      this.user.setPassword( HashCrypt.getInstance().encrypt("develop001", salt) );
+      this.user.setSalt(salt);
+      this.user.setFirstName("Young Hee");
+      this.user.setLastName("Kim");
+      this.user.setIsUse('T');
+      this.user.setSex("F");
+
+      Assertions.assertAll(
+        () -> userService.addUser(user)
+      );
+    }
+
+    @Test
+    @DisplayName("성공")
+    public void success()
+    {
+      Assertions.assertFalse(
+        userService.isExist(this.userId)
+      );
+    }
+    @Test
+    @DisplayName("실패")
+    public void failed()
+    {
+      Assertions.assertTrue(
+        userService.isExist("#anonymous")
+      );
+    }
+  }
+
+  @Nested
+  @Transactional
   @DisplayName("사용자 조회")
   class getUser
   {
@@ -32,7 +79,7 @@ class UserServiceTest
 
       this.user = new UserVO();
 
-      this.user.setUserId("develop");
+      this.user.setUserId("#develop");
       this.user.setPassword( HashCrypt.getInstance().encrypt("develop001", salt) );
       this.user.setSalt(salt);
       this.user.setFirstName("Young Hee");
@@ -59,7 +106,7 @@ class UserServiceTest
     public void failedNoFound()
     {
       Assertions.assertFalse(
-        userService.getUser("anonymous").isPresent()
+        userService.getUser("#anonymous").isPresent()
       );
     }
 
@@ -80,7 +127,7 @@ class UserServiceTest
 
       this.user = new UserVO();
 
-      this.user.setUserId("develop");
+      this.user.setUserId("#develop");
       this.user.setPassword( HashCrypt.getInstance().encrypt("develop001", salt) );
       this.user.setSalt(salt);
       this.user.setFirstName("Young Hee");
@@ -123,7 +170,7 @@ class UserServiceTest
     public void init() throws NoSuchAlgorithmException
     {
       final long   salt   = new SecureRandom().nextLong();
-      final String userId = "develop";
+      final String userId = "#develop";
 
       this.user = new UserVO();
 
@@ -161,7 +208,7 @@ class UserServiceTest
     {
       final long salt = new SecureRandom().nextLong();
 
-      user.setUserId("anonymous");
+      user.setUserId("#anonymous");
       user.setPassword( HashCrypt.getInstance().encrypt("develop002", salt) );
       user.setSalt(salt);
 
@@ -184,7 +231,7 @@ class UserServiceTest
     public void init() throws NoSuchAlgorithmException
     {
       final long   salt   = new SecureRandom().nextLong();
-      final String userId = "develop";
+      final String userId = "#develop";
 
       this.user = new UserVO();
 
@@ -214,7 +261,7 @@ class UserServiceTest
     @DisplayName("없는 사용자 실패 케이스")
     public void failedNoUser()
     {
-      user.setUserId("anonymous");
+      user.setUserId("#anonymous");
 
       Assertions.assertThrows(
         RuntimeException.class,
