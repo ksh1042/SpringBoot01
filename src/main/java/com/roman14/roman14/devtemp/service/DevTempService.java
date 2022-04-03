@@ -1,4 +1,4 @@
-package com.roman14.roman14.devtemp.controller;
+package com.roman14.roman14.devtemp.service;
 
 import com.roman14.roman14.devtemp.entity.DevTemp;
 import com.roman14.roman14.devtemp.repository.DevTempRepository;
