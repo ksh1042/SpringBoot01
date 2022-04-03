@@ -57,8 +57,7 @@ public class LoginController
     if(loginUser.isPresent())
     {
       // success
-      UserVO user = loginService.login(userId, password);
-      session.setAttribute("user", user);
+      session.setAttribute("user", loginService.login(userId, password));
       returnUrl = "/main";
     }
 
