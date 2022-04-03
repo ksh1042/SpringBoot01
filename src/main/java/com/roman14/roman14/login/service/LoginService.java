@@ -8,6 +8,7 @@ import com.roman14.roman14.login.util.HashCrypt;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Optional;
 
 @Service
@@ -48,6 +49,27 @@ public class LoginService
 
       return result;
     });
+  }
+
+  /**
+   * 사용자 로그인(보안을 위해 로그인 성공시 salt 값을 갱신하여 사전공격(DA) 회피)
+   * @param userId
+   * @param password
+   * @return
+   */
+  public UserVO login(String userId, String password) throws NoSuchAlgorithmException
+  {
+    final Optional<UserVO> user = userRepository.findById(userId);
+
+    if(!user.isPresent()) throw new RuntimeException();
+
+    final long newSalt = new SecureRandom().nextLong();
+    final String newPwd = HashCrypt.getInstance().encrypt(password, newSalt);
+
+    user.get().setPassword(newPwd);
+    user.get().setSalt(newSalt);
+
+    return userRepository.save(user.get());
   }
 
 }
