@@ -1,6 +1,7 @@
 package com.roman14.roman14.devtemp.controller;
 
 import com.roman14.roman14.devtemp.entity.DevTemp;
+import com.roman14.roman14.devtemp.service.DevTempService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
