@@ -2,11 +2,10 @@ package com.roman14.roman14.login.controller;
 
 import com.roman14.roman14.login.entity.UserVO;
 import com.roman14.roman14.login.service.LoginService;
+import com.roman14.roman14.login.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
@@ -17,10 +16,12 @@ import java.util.Optional;
 public class LoginController
 {
   private final LoginService loginService;
+  private final UserService userService;
 
-  public LoginController(LoginService loginService)
+  public LoginController(LoginService loginService, UserService userService)
   {
     this.loginService = loginService;
+    this.userService = userService;
   }
 
   /**
@@ -34,7 +35,7 @@ public class LoginController
     final Optional<UserVO> loginUser = Optional.ofNullable( (UserVO) session.getAttribute("user") );
 
     if(!loginUser.isPresent())
-      return "/login/view.html";
+      return "/login/login.html";
     else
       return "/main";
 
@@ -47,6 +48,7 @@ public class LoginController
    * @param session
    * @return
    */
+  @PostMapping("")
   public String login(@RequestParam("userId") final String userId, @RequestParam("password") final String password, final HttpSession session)
     throws NoSuchAlgorithmException
   {
@@ -74,6 +76,36 @@ public class LoginController
   {
     session.invalidate();
     return "/login";
+  }
+
+  /**
+   * 회원가입 뷰 호출
+   * @return
+   */
+  @GetMapping("/signIn")
+  public String signInView()
+  {
+    return "/login/signIn.html";
+  }
+
+  /**
+   * 회원가입
+   * @param user
+   * @return
+   */
+  @PostMapping("/signIn")
+  public ResponseEntity<?> signIn(@RequestBody UserVO user)
+  {
+    if(!userService.isExist(user.getUserId()))
+    {
+      userService.addUser(user);
+    }
+    else
+    {
+      throw new IllegalArgumentException(user.getUserId() + " is already created");
+    }
+
+    return ResponseEntity.ok().body(null);
   }
 
 }
